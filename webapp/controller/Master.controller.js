@@ -28,7 +28,21 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf com.delaware.tw.trac2018.view.Master
 		 */
-		//	onAfterRendering: function() {
+			onAfterRendering: function() {
+			var oModel =	this.getView().getModel();
+			var that = this;
+			
+			oModel.read("/ZV_ZVT18_CUSTM_TW", {
+			     success: function(oData){
+			     	that.getView().getModel("customersModel").setData ({
+			     		"customers":oData.results
+			     	});
+			     },
+			     error: function(oError){
+			     	console.log(oError);
+			     }
+			});
+			}
 		//
 		//	},
 
@@ -40,6 +54,6 @@ sap.ui.define([
 		//
 		//	}
 
-	});
+			});
 
 });
