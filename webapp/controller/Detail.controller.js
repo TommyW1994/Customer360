@@ -1,9 +1,54 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function (Controller) {
+	"com/delaware/tw/trac2018/controller/BaseController",
+	"sap/ui/model/Filter"
+], function (BaseController, Filter) {
 	"use strict";
 
-	return Controller.extend("com.delaware.tw.trac2018.controller.Detail", {
+	return BaseController.extend("com.delaware.tw.trac2018.controller.Detail", {
+
+		onInit: function () {
+			this.getRouter().getRoute("Detail").attachPatternMatched(this._onRoutingMatched, this);
+		},
+
+		_onRoutingMatched: function (oEvent) {
+			this.getView().setBusy(true);
+			var sCustomerNumber = oEvent.getParameter("arguments").customerNumber;
+			console.log(sCustomerNumber);
+
+			var that = this;
+
+			var aFilters = [new Filter("customer", sap.ui.model.FilterOperator.EQ, sCustomerNumber)];
+
+			// this.getView().getModel("ordersModel").read("/ZV_ZVT18_ORDERS_JVN", {
+			// 		success: function (oData) {
+			// 			console.log(oData);
+			// 			that.getModel("ordersModel").setData(oData.results);
+			// 		},
+			// 		error: function (oError) {
+			// 			that.showError(oError);
+			// 		});
+
+			// 	this.getView().setBusy(false);
+			// }
+			if (this.getView().getModel("orderModel") !== undefined) {
+				this.getView().getModel("orderModel").read("/ZV_ZVT18_ORDERS_JVN", {
+
+					filters: aFilters,
+					success: function (oData) {
+						console.log(oData);
+						that.getView().getModel("ordersModel").setData({
+							"orders": oData.results
+						})
+					},
+					error: function (oError) {
+						console.log(oError);
+					}
+				});
+				this.getView().setBusy(false);
+			}
+
+			this.getView().setBusy(false);
+		}
 
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.

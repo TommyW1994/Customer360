@@ -3,7 +3,17 @@
 	<App>
 		<pages>
 			<Page title="Title">
-				<content></content>
+				<content>
+					<List id="ordersList" items="{ordersModel>/orders}">
+						<ObjectListItem title="{ordersModel>OrderNumber}">
+							<attributes>
+								<ObjectAttribute title="ID" text="{ordersModel>Id}"/>
+								<ObjectAttribute title="Delivery Date" text="{ordersModel>RequestedDeliveryDate}"/>
+								<ObjectAttribute title="Net Value" text="{ordersModel>NetValue}"/>
+							</attributes>
+						</ObjectListItem>
+					</List>
+				</content>
 			</Page>
 		</pages>
 	</App>

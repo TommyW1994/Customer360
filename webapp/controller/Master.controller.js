@@ -1,9 +1,21 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller"
-], function (Controller) {
+	"com/delaware/tw/trac2018/controller/BaseController",
+	"com/delaware/tw/trac2018/model/Formatter"
+], function (BaseController, Formatter) {
 	"use strict";
 
-	return Controller.extend("com.delaware.tw.trac2018.controller.Master", {
+	return BaseController.extend("com.delaware.tw.trac2018.controller.Master",
+	{formatter: 	Formatter,
+	
+	onCustomerPress: function(oEvent){
+		var oCustomer = oEvent.getSource().getBindingContext("customersModel").getObject();
+		
+		this.getRouter().navTo("Detail", {
+			customerNumber: oCustomer.CustomerNumber
+		});
+		
+		this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
+	},
 
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -34,6 +46,7 @@ sap.ui.define([
 			
 			oModel.read("/ZV_ZVT18_CUSTM_TW", {
 			     success: function(oData){
+			     	console.log(oData);
 			     	that.getView().getModel("customersModel").setData ({
 			     		"customers":oData.results
 			     	});
